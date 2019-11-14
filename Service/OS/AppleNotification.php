@@ -331,7 +331,14 @@ class AppleNotification implements OSNotificationServiceInterface, EventListener
             $passphrase = $this->pemContentPassphrase;
         }
 
-        $ctx = stream_context_create();
+        $opts = array(
+            'http'=>array(
+                "method" => 'POST',
+                'header'=>"apns-push-type: alert"
+            )
+        );
+
+        $ctx = stream_context_create($opts);
         stream_context_set_option($ctx, "ssl", "local_cert", $pem);
         if (strlen($passphrase)) {
             stream_context_set_option($ctx, "ssl", "passphrase", $passphrase);
